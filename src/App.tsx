@@ -1,11 +1,10 @@
+const App = (): JSX.Element => {
+	return (
+		<>
+			<h1>Vite + React</h1>
+			<p>Otro</p>
+		</>
+	);
+};
 
-function App() {
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-    </>
-  )
-}
-
-export default App
+export default App;
