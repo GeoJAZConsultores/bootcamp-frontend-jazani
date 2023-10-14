@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Menu from './components/Menu';
 
@@ -6,7 +7,7 @@ const Admin = (): JSX.Element => {
 		<>
 			<Menu />
 			<Container>
-				<div>Admin</div>
+				<Outlet />
 			</Container>
 		</>
 	);
