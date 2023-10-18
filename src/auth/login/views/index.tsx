@@ -4,21 +4,57 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import { type LoginRequest, UserSecurityResponse } from '@/auth/login/domain';
+
 const index = (): JSX.Element => {
+	// Attributes
+	const formik = useFormik<LoginRequest>({
+		initialValues: {
+			email: '',
+			password: '',
+		},
+		validationSchema: Yup.object({
+			email: Yup.string().email('Ingrese un email valido').required('Email es requerido'),
+			password: Yup.string().required('Password es requerido'),
+		}),
+		onSubmit: (values: LoginRequest) => {
+			console.log('Values: ', values);
+		},
+	});
+
 	return (
 		<Row className="justify-content-center align-items-center vh-100">
 			<Col xs={12} sm={8} md={7} lg={6} xl={5} xxl={4}>
 				<Card>
 					<Card.Header>Login</Card.Header>
 					<Card.Body>
-						<Form className="d-grid gap-3">
+						<Form className="d-grid gap-3" onSubmit={formik.handleSubmit}>
 							<Form.Group>
 								<Form.Label>Email</Form.Label>
-								<Form.Control type="email" name="email" />
+								<Form.Control
+									type="email"
+									name="email"
+									value={formik.values.email}
+									onChange={formik.handleChange}
+								/>
+								{(formik.touched.email ?? false) && formik.errors.email != null && (
+									<small className="text-danger">{formik.errors.email}</small>
+								)}
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Password</Form.Label>
-								<Form.Control type="password" name="password" />
+								<Form.Control
+									type="password"
+									name="password"
+									value={formik.values.password}
+									onChange={formik.handleChange}
+								/>
+								{(formik.touched.password ?? false) && formik.errors.password != null && (
+									<small className="text-danger">{formik.errors.password}</small>
+								)}
 							</Form.Group>
 
 							<hr />
