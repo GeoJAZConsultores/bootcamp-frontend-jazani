@@ -33,9 +33,9 @@ export const isValidAuthorization = (): boolean => {
 
 	const user: UserSecurityResponse = JSON.parse(data);
 
-	if (user.security?.expireOn === null) return false;
+	if (user.security?.expireOn.length === 0) return false;
 
-	const expireOn = user.security.expireOn;
+	const expireOn = new Date(user.security.expireOn);
 	const currentDate = new Date();
 
 	return expireOn > currentDate;

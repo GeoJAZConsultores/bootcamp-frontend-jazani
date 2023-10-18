@@ -11,6 +11,10 @@ import './core/styles/app.scss';
 import router from './core/router';
 import { RouterProvider } from 'react-router-dom';
 
+import { AxiosInterceptor } from './core/interceptors';
+
+AxiosInterceptor();
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root') as HTMLElement).render(
