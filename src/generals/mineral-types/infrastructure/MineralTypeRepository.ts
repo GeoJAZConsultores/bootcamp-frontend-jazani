@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import { API_BASE_URL } from '@/core/constants/env';
 import { type MineralTypeResponse } from '../domain';
 
 export const findAll = async (): Promise<MineralTypeResponse[]> => {
@@ -8,9 +9,9 @@ export const findAll = async (): Promise<MineralTypeResponse[]> => {
 
 	// return response;
 
-	const response: AxiosResponse<MineralTypeResponse[]> = await axios
-		.get<MineralTypeResponse[]>('https://localhost:7014/api/mineraltype');
+	const response: AxiosResponse<MineralTypeResponse[]> = await axios.get<MineralTypeResponse[]>(
+		`${API_BASE_URL}/api/mineraltype`,
+	);
 
 	return response.data;
-}
-	
+};
