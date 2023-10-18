@@ -7,7 +7,8 @@ import Button from 'react-bootstrap/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { type LoginRequest, UserSecurityResponse } from '@/auth/login/domain';
+import { type LoginRequest, type UserSecurityResponse } from '@/auth/login/domain';
+import useLogin from '@/auth/login/application/hooks/useLogin';
 
 const index = (): JSX.Element => {
 	// Attributes
@@ -22,8 +23,19 @@ const index = (): JSX.Element => {
 		}),
 		onSubmit: (values: LoginRequest) => {
 			console.log('Values: ', values);
+			void loginAuth(values);
 		},
 	});
+
+	// React Query
+	const { mutateAsync, isSuccess, isError } = useLogin();
+
+	// Methods
+	const loginAuth = async (payload: LoginRequest): Promise<void> => {
+		const response: UserSecurityResponse = await mutateAsync(payload);
+
+		console.log('Logi: ', response);
+	};
 
 	return (
 		<Row className="justify-content-center align-items-center vh-100">
