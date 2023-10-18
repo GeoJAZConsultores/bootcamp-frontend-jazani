@@ -1,10 +1,14 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 // import { lazy, Suspense } from 'react';
 
-import Admin from '../layouts/Admin';
-import Home from '../../home';
-import MineralTypeSearch from '../../generals/mineral-types/views/searchs';
-import MineralSearch from '../../generals/minerals/views/searchs';
+import Admin from '@/core/layouts/Admin';
+import Home from '@/home';
+import MineralTypeSearch from '@/generals/mineral-types/views/searchs';
+import MineralSearch from '@/generals/minerals/views/searchs';
+
+// Auth
+import Auth from '@/core/layouts/Auth';
+import Login from '@/auth/login/views';
 
 const routes: RouteObject[] = [
 	{
@@ -22,6 +26,16 @@ const routes: RouteObject[] = [
 			{
 				path: '/minerals',
 				element: <MineralSearch />,
+			},
+		],
+	},
+	{
+		path: '/login',
+		element: <Auth />,
+		children: [
+			{
+				index: true,
+				element: <Login />,
 			},
 		],
 	},
