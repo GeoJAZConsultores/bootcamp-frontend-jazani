@@ -1,26 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
-import { MineralTypeRepository } from '../../infrastructure';
-import { type MineralTypeResponse } from '../../domain';
+import { type MineralTypeFilter, type MineralTypeResponse } from '../../domain';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { Card } from 'react-bootstrap';
+import { type RequestPagination } from '@/shared/domain';
+import usePaginatedSearchMineralType from '../../application/hooks/usePaginatedSearchMineralType';
 
 const index = (): JSX.Element => {
-	const [mineralTypes, mineralTypesSet] = useState<MineralTypeResponse[]>([]);
+	const [mineralTypeFilter, setMineralTypeFilter] = useState<RequestPagination<MineralTypeFilter>>({
+		page: 2,
+		perPage: 10,
+	});
 
-	useEffect(() => {
-		void loadMineralTypes();
-	}, []);
-
-	const loadMineralTypes = async (): Promise<void> => {
-		const response = await MineralTypeRepository.findAll();
-
-		mineralTypesSet(response);
-		console.log('response: ', response);
-	};
+	// React Query
+	const { data: mineralTypePaginated, isFetching } =
+		usePaginatedSearchMineralType(mineralTypeFilter);
 
 	return (
 		<>
@@ -40,20 +37,19 @@ const index = (): JSX.Element => {
 									</tr>
 								</thead>
 								<tbody>
-									{mineralTypes.length > 0 &&
-										mineralTypes.map(mineralType => (
-											<tr key={mineralType.id}>
-												<td>{mineralType.id}</td>
-												<td>{mineralType.name}</td>
-												<td>{mineralType.description}</td>
-												<td>{mineralType.slug}</td>
-												<td>
-													<Badge pill bg={mineralType.state ? 'success' : 'danger'}>
-														{mineralType.state ? 'Activo' : 'Elminado'}
-													</Badge>
-												</td>
-											</tr>
-										))}
+									{mineralTypePaginated?.data?.map(mineralType => (
+										<tr key={mineralType.id}>
+											<td>{mineralType.id}</td>
+											<td>{mineralType.name}</td>
+											<td>{mineralType.description}</td>
+											<td>{mineralType.slug}</td>
+											<td>
+												<Badge pill bg={mineralType.state ? 'success' : 'danger'}>
+													{mineralType.state ? 'Activo' : 'Elminado'}
+												</Badge>
+											</td>
+										</tr>
+									))}
 								</tbody>
 							</Table>
 						</Card.Body>
