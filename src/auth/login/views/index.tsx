@@ -10,9 +10,11 @@ import * as Yup from 'yup';
 import { type LoginRequest, type UserSecurityResponse } from '@/auth/login/domain';
 import useLogin from '@/auth/login/application/hooks/useLogin';
 import { LocalStorageSession } from '@/core/sessions';
+import { useNavigate } from 'react-router-dom';
 
 const index = (): JSX.Element => {
 	// Attributes
+	const navigate = useNavigate();
 	const formik = useFormik<LoginRequest>({
 		initialValues: {
 			email: '',
@@ -38,6 +40,7 @@ const index = (): JSX.Element => {
 		console.log('Logi: ', response);
 
 		LocalStorageSession.saveAuthorization(response);
+		navigate('/');
 	};
 
 	return (
