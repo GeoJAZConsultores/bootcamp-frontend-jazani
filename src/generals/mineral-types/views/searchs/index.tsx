@@ -4,14 +4,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { Card } from 'react-bootstrap';
-import { type RequestPagination } from '@/shared/domain';
+import { type FilterPage, type RequestPagination } from '@/shared/domain';
 import usePaginatedSearchMineralType from '../../application/hooks/usePaginatedSearchMineralType';
-import { TableSimple } from '@/core/components/table';
 import { createColumnHelper } from '@tanstack/react-table';
+import TablePaginated from '@/core/components/table/TablePaginated';
 
 const index = (): JSX.Element => {
 	const [mineralTypeFilter, setMineralTypeFilter] = useState<RequestPagination<MineralTypeFilter>>({
-		page: 2,
+		page: 1,
 		perPage: 10,
 	});
 
@@ -55,6 +55,17 @@ const index = (): JSX.Element => {
 		}),
 	];
 
+	// Methods
+	const goToPage = (payload: FilterPage): void => {
+		setMineralTypeFilter(prev => {
+			return {
+				...prev,
+				page: payload.page,
+				perPage: payload.perPage,
+			};
+		});
+	};
+
 	return (
 		<>
 			<Row className="pt-2">
@@ -62,9 +73,10 @@ const index = (): JSX.Element => {
 					<Card>
 						<Card.Header>Listado de Tipo de Minerales</Card.Header>
 						<Card.Body>
-							<TableSimple<MineralTypeResponse>
+							<TablePaginated<MineralTypeResponse>
 								columns={columns}
-								data={mineralTypePaginated?.data ?? []}
+								data={mineralTypePaginated}
+								goToPage={goToPage}
 							/>
 						</Card.Body>
 					</Card>
