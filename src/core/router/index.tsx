@@ -6,6 +6,9 @@ import { PrivateOutlet, PublicOutlet } from '@/core/router/CheckPageNavigation';
 import Admin from '@/core/layouts/Admin';
 import Home from '@/home';
 import MineralTypeSearch from '@/generals/mineral-types/views/searchs';
+import MineralTypeCreate from '@/generals/mineral-types/views/create';
+import MineralTypeEdit from '@/generals/mineral-types/views/edit';
+
 import MineralSearch from '@/generals/minerals/views/searchs';
 
 // Auth
@@ -28,6 +31,14 @@ const routes: RouteObject[] = [
 			{
 				path: '/mineral-types',
 				element: <MineralTypeSearch />,
+			},
+			{
+				path: '/mineral-types/create',
+				element: <MineralTypeCreate />,
+			},
+			{
+				path: '/mineral-types/edit/:id',
+				element: <MineralTypeEdit />,
 			},
 			{
 				path: '/minerals',
