@@ -1,17 +1,13 @@
 import { useMutation, type UseMutationResult, useQueryClient } from '@tanstack/react-query';
-import { type MineralTypeResponse, type MineralTypeRequest } from '../../domain';
+import { type MineralTypeResponse } from '../../domain';
 import { MineralTypeRepository } from '../../infrastructure';
 import { FIND_BY_ID, PAGINATED_SEARCH } from './QueryKeys';
 
-const useCreateMineralType = (): UseMutationResult<
-	MineralTypeResponse,
-	Error,
-	MineralTypeRequest
-> => {
+const useRemoveMineralType = (): UseMutationResult<MineralTypeResponse, Error, number> => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (payload: MineralTypeRequest) => await MineralTypeRepository.create(payload),
+		mutationFn: async (id: number) => await MineralTypeRepository.remove(id),
 		onError: error => {
 			console.error('Error', error);
 		},
@@ -22,4 +18,4 @@ const useCreateMineralType = (): UseMutationResult<
 	});
 };
 
-export default useCreateMineralType;
+export default useRemoveMineralType;

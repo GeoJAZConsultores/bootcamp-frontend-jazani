@@ -3,17 +3,23 @@ import { type MineralTypeResponse, type MineralTypeRequest } from '../../domain'
 import { MineralTypeRepository } from '../../infrastructure';
 import { FIND_BY_ID, PAGINATED_SEARCH } from './QueryKeys';
 
-const useCreateMineralType = (): UseMutationResult<
+interface EditMineralTypeProps {
+	payload: MineralTypeRequest;
+	id: number;
+}
+
+const useEditMineralType = (): UseMutationResult<
 	MineralTypeResponse,
 	Error,
-	MineralTypeRequest
+	EditMineralTypeProps
 > => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (payload: MineralTypeRequest) => await MineralTypeRepository.create(payload),
+		mutationFn: async (params: EditMineralTypeProps) =>
+			await MineralTypeRepository.edit(params.payload, params.id),
 		onError: error => {
-			console.error('Error', error);
+			console.error('Edit', error);
 		},
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: [PAGINATED_SEARCH] });
@@ -22,4 +28,4 @@ const useCreateMineralType = (): UseMutationResult<
 	});
 };
 
-export default useCreateMineralType;
+export default useEditMineralType;

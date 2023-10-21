@@ -13,8 +13,12 @@ import usePaginatedSearchMineralType from '../../application/hooks/usePaginatedS
 import { createColumnHelper } from '@tanstack/react-table';
 import TablePaginated from '@/core/components/table/TablePaginated';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import useRemoveMineralType from '../../application/hooks/useRemoveMineralType';
 
 const index = (): JSX.Element => {
+	// Atributtes
+
 	const [mineralTypeFilter, setMineralTypeFilter] = useState<RequestPagination<MineralTypeFilter>>({
 		page: 1,
 		perPage: 10,
@@ -46,10 +50,36 @@ const index = (): JSX.Element => {
 	const { data: mineralTypePaginated, isFetching } =
 		usePaginatedSearchMineralType(mineralTypeFilter);
 
+	const { mutateAsync } = useRemoveMineralType();
+
 	// React Table
 	const columnHelper = createColumnHelper<MineralTypeResponse>();
 
 	const columns = [
+		columnHelper.display({
+			id: 'acciones',
+			header: () => <span className="d-block text-center">Acciones</span>,
+			cell: ({ row }) => (
+				<span className="d-flex align-items-center justify-content-center">
+					<Link
+						className="btn btn-primary btn-sm me-2"
+						to={`/mineral-types/edit/${row.original.id}`}
+					>
+						✎{' '}
+					</Link>
+					<Button
+						type="button"
+						variant="danger"
+						className="me-2 btn-sm"
+						onClick={() => {
+							void removeById(row.original);
+						}}
+					>
+						🗑{' '}
+					</Button>
+				</span>
+			),
+		}),
 		columnHelper.accessor('id', {
 			header: 'ID',
 			cell: info => info.getValue(),
@@ -91,6 +121,22 @@ const index = (): JSX.Element => {
 				perPage: payload.perPage,
 			};
 		});
+	};
+
+	const removeById = async (payload: MineralTypeResponse): Promise<void> => {
+		const selectedOption = await Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!',
+		});
+
+		if (selectedOption.isConfirmed) {
+			await mutateAsync(payload.id);
+		}
 	};
 
 	return (
