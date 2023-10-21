@@ -6,10 +6,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import '@popperjs/core';
 // import 'bootstrap';
 
-// import './core/styles/app.scss';
-
 // import '@/core/templates/scss/app.scss';
 import '@/core/templates/js/app.js';
+
+import './core/styles/app.scss';
 
 import router from './core/router';
 import { RouterProvider } from 'react-router-dom';
